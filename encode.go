@@ -403,6 +403,11 @@ func (e *encoder) floatv(tag string, in reflect.Value) {
 		s = "-.inf"
 	case "NaN":
 		s = ".nan"
+	default:
+		// prevent value becoming integer when parsing
+		if _, err := strconv.Atoi(s); err == nil {
+			s += ".0"
+		}
 	}
 	e.emitScalar(s, "", tag, yaml_PLAIN_SCALAR_STYLE, nil, nil, nil, nil)
 }
